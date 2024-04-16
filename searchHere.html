@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Station Locator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #search-form {
+            margin-top: 20px;
+        }
+
+        #search-input {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #search-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #search-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="search-form">
+        <input type="text" id="search-input" placeholder="Enter station name...">
+        <button id="search-btn">Search</button>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        document.getElementById("search-btn").addEventListener("click", function() {
+            const input = document.getElementById("search-input").value;
+            const searchQuery = encodeURIComponent(input);
+            const googleMapsURL = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+            window.location.href = googleMapsURL;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking User's Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #04AA6D;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr.done {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .done-btn {
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 600px) {
+            .header {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Booking User's Data</h1>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Time</th>
+                <th>Date</th>
+                <th>SName</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="userdata">
+            <!-- User data will be populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        async function callapi() {
+            try {
+                let result = await fetch("https://script.google.com/macros/s/AKfycbw1-0SQdYGZ6Ds3P_m4Rv09Oe5sgn2a9VVnmLJ-QBkfaZ9cjuVbf6ci10nhL8fwbg/exec");
+                if (!result.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                let response = await result.json();
+                console.log(response); // Log the response to inspect its structure
+
+                if (response && response.data && Array.isArray(response.data)) {
+                    // If response contains data array, proceed with populating the table
+                    let tableBody = document.getElementById('userdata');
+                    tableBody.innerHTML = ''; // Clear existing table body
+                    response.data.forEach(user => {
+                        let row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.Name}</td>
+                            <td>${user.Phone}</td>
+                            <td>${user.Time}</td>
+                            <td>${user.Date}</td>
+                            <td>${user.SName}</td>
+                            <td>
+                                <button class="done-btn" onclick="markAsDone(this)">Done</button>
+                            </td>
+                        `;
+                        // Check if row was marked as done previously and apply 'done' class
+                        if (localStorage.getItem(user.Name)) {
+                            row.classList.add('done');
+                        }
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    // If response format is unexpected, log an error
+                    console.error('Unexpected response format:', response);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function markAsDone(button) {
+            let row = button.parentElement.parentElement;
+            row.classList.toggle('done');
+            let userName = row.querySelector('td:first-child').innerText;
+            // Toggle the 'done' state in local storage for the user
+            if (row.classList.contains('done')) {
+                localStorage.setItem(userName, 'done');
+            } else {
+                localStorage.removeItem(userName);
+            }
+        }
+
+        callapi();
+    </script>
+</body>
+</html>

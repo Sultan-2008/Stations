@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    
+    .header {
+      background-color: #04AA6D;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    
+    .container {
+      border-radius: 5px;
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+    }
+    
+    input[type=text], input[type=phone], input[type=time], input[type=date] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    input[type=submit], .show-bookings-btn {
+      background-color: #04AA6D;
+      color: white;
+      width: 100%;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px; /* Added margin top */
+    }
+    
+    input[type=submit]:hover, .show-bookings-btn:hover {
+      background-color: #45a049;
+    }
+    
+    .container {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    
+    @media screen and (max-width: 600px) {
+      .container {
+        width: 100%;
+      }
+    }
+    </style>
+    </head>
+    <body>
+    
+    <div class="header">
+      <h2>Book Your Schedule In Respective Stations!</h2>
+    </div>
+<div class="container">
+    <form id="google-sheets-form" action="https://script.google.com/macros/s/AKfycbw1-0SQdYGZ6Ds3P_m4Rv09Oe5sgn2a9VVnmLJ-QBkfaZ9cjuVbf6ci10nhL8fwbg/exec" method="POST">
+        <label for="Name">Name</label>
+        <input type="text" name="Name" placeholder="Your name..">
+    
+        <label for="phone">Phone Number: </label>
+        <input type="phone" name="Phone" placeholder="Enter phone No.">
+         
+        <label for="time">Time: </label>
+        <input type="time" name="Time" >
+
+        <label for="date">Date: </label>
+        <input type="date" name="Date" >
+    
+        <label for="sname">Station Name:</label>
+        <input type="text" name="SName" placeholder="Station Name..">
+    
+        <input type="submit" value="Submit" name="submit">
+    </form>
+    <button class="show-bookings-btn" onclick="showBookings()">Show Bookings</button> <!-- Added button -->
+</div>
+</div>
+
+<script>
+    const form = document.getElementById('google-sheets-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // Instead of response.json()
+        })
+        .then(data => {
+            alert(data); // Use data directly, as it's a text response
+            form.reset();
+        })
+        .catch(error => console.error('Error!', error));
+    });
+
+    function showBookings() {
+    // Redirect to the bookingDetails.html page
+    window.location.href = "bookingDetails.html";
+}
+</script>
+
+</body>
+</html>
+
+<!-- https://docs.google.com/spreadsheets/d/1VNe_0WwcM9b1n4oM8FLbeVzzuyq0b-n-N-BWe5VZYPk/edit?usp=sharing -->
+<!-- 1VNe_0WwcM9b1n4oM8FLbeVzzuyq0b-n-N-BWe5VZYPk -->
